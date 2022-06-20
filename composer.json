@@ -1,0 +1,40 @@
+{
+  "name": "liangtao/struct",
+  "type": "library",
+  "description": "PHP core class library",
+  "keywords": [
+    "php",
+    "struct",
+    "struct-php"
+  ],
+  "homepage": "https://github.com/liangtao-top/struct-php",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "TaoGe",
+      "email": "liangtao.gz@foxmail.com",
+      "role": "Developer",
+      "homepage": "https://github.com/liangtao-top"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "phpenum/phpenum": "^1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "top\\liangtao\\struct\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "top\\liangtao\\struct\\tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  ]
+}

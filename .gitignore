@@ -1,0 +1,11 @@
+/.well-known
+/.idea
+/.vscode
+/vendor
+*.log
+.user.ini
+.env
+.DS_Store
+composer.lock
+swoole-compiler
+
