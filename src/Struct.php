@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace top\liangtao\struct;
 
 use Error;
+use ReflectionEnum;
 use Throwable;
 use ArrayAccess;
 use PhpEnum\Enum;
@@ -44,16 +45,21 @@ abstract class Struct implements JsonSerializable, ArrayAccess
                 $property = $ref->getProperty($key);
                 if (!$property->getType()->isBuiltin()) {
                     try {
-                        $is_type  = false;
-                        $ref_type = (new ReflectionClass($property->getType()->getName()));
+                        $isType  = false;
+                        $refType = new ReflectionClass($property->getType()->getName());
                         try {
-                            if ($ref_type->isInstance($value)) {
-                                $is_type = true;
+                            if ($refType->isInstance($value)) {
+                                $isType = true;
                             }
                         } catch (Throwable) {
                         }
-                        if ($is_type === false) {
-                            $value = $ref_type->newInstance($value);
+                        if ($isType === false) {
+                            if (enum_exists($refType->getName())) {
+                                $refEnum = new ReflectionEnum($refType->getName());
+                                $value   = $refEnum->getCase($value)->getValue();
+                            } else {
+                                $value = $refType->newInstance($value);
+                            }
                         }
                     } catch (ReflectionException) {
                     }
