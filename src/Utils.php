@@ -27,7 +27,7 @@ class Utils
      * @param bool   $ucfirst 首字母是否大写（驼峰规则）
      * @return string
      */
-    public static function parse_name(string $name, int $type = 0, bool $ucfirst = true): string
+    public static function parseName(string $name, int $type = 0, bool $ucfirst = true): string
     {
         if ($type) {
             $name = preg_replace_callback('/_([a-zA-Z])/', function ($match) {

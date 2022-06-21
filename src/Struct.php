@@ -15,13 +15,13 @@ declare(strict_types=1);
 namespace top\liangtao\struct;
 
 use Error;
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
-use PhpEnum\Enum;
 use Throwable;
 use ArrayAccess;
+use PhpEnum\Enum;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
+use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
 
 /**
  * 结构体抽象类
@@ -32,14 +32,13 @@ abstract class Struct implements JsonSerializable, ArrayAccess
     /**
      * Struct constructor.
      * @param array $data
-     * @throws \ReflectionException
      */
     public function __construct(array $data = [])
     {
         $ref = new ReflectionClass($this);
         foreach ($data as $key => $value) {
             if (!$ref->hasProperty($key)) {
-                $key = Utils::parse_name($key, 1, false);
+                $key = Utils::parseName($key, 1, false);
             }
             if ($ref->hasProperty($key)) {
                 $property = $ref->getProperty($key);
@@ -59,9 +58,12 @@ abstract class Struct implements JsonSerializable, ArrayAccess
                     } catch (ReflectionException) {
                     }
                 }
-                $methodName = 'set' . Utils::parse_name($property->getName(), 1);
+                $methodName = 'set' . Utils::parseName($property->getName(), 1);
                 if ($ref->hasMethod($methodName)) {
-                    $ref->getmethod($methodName)->invoke($this, $value);
+                    try {
+                        $ref->getmethod($methodName)->invoke($this, $value);
+                    } catch (ReflectionException) {
+                    }
                 } else {
                     $property->setValue($this, $value);
                 }
@@ -82,9 +84,9 @@ abstract class Struct implements JsonSerializable, ArrayAccess
         $ref   = new ReflectionClass($this);
         $array = [];
         foreach ($ref->getProperties() as $property) {
-            $key = $style ? Utils::parse_name($property->getName()) : $property->getName();
+            $key = $style ? Utils::parseName($property->getName()) : $property->getName();
             try {
-                $methodName = 'get' . Utils::parse_name($property->getName(), 1);
+                $methodName = 'get' . Utils::parseName($property->getName(), 1);
                 if ($ref->hasMethod($methodName)) {
                     $value = $ref->getmethod($methodName)->invoke($this);
                 } else {
