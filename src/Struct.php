@@ -32,9 +32,22 @@ abstract class Struct implements JsonSerializable, ArrayAccess
 
     /**
      * Struct constructor.
-     * @param array $data
+     * @param array|null $data
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = null)
+    {
+        if (!is_null($data)) {
+            $this->mergeFromArray($data);
+        }
+    }
+
+    /**
+     * 从数组合并到当前类
+     * @param array $data
+     * @author TaoGe <liangtao.gz@foxmail.com>
+     * @date   2022/6/28 15:14
+     */
+    public function mergeFromArray(array $data): void
     {
         $ref = new ReflectionClass($this);
         foreach ($data as $key => $value) {
